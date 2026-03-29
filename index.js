@@ -165,6 +165,18 @@ app.get(`${homePath}/books/release/year/2012`, async (req, res) => {
   res.status(200).json(success("Books fetched successfully", { data: data }));
 });
 
+app.post(`${homePath}/books/update/:id`, async (req, res) => {
+  const { id } = req.params;
+  const { rating } = req.body;
+  const { error, data } = await updateById(id, { rating: rating });
+  if (error) {
+    console.log("db error: updating by id", error);
+    res.status(500).json(fail("Internal server error: db operation failed"));
+  }
+
+  res.status(200).json(success("Book updated", { data: data }));
+});
+
 (async () => {
   await connectDb();
 
