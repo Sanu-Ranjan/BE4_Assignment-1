@@ -91,6 +91,20 @@ const deleteById = async (id) => {
   }
 };
 
+const homePath = "/neog/BE/4/Assignment_1";
+
+app.get(`${homePath}/books`, async (req, res) => {
+  const { data, error } = await getAll();
+  if (error) {
+    console.log("db error: fetching all books", error);
+    return res
+      .status(500)
+      .json(fail("Internal server error: database operation failed"));
+  }
+
+  res.status(200).json(success("books fetched successfully", { books: data }));
+});
+
 (async () => {
   await connectDb();
 
