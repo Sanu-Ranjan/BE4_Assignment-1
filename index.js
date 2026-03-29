@@ -105,6 +105,22 @@ app.get(`${homePath}/books`, async (req, res) => {
   res.status(200).json(success("books fetched successfully", { books: data }));
 });
 
+app.get(`${homePath}/books/:title`, async (req, res) => {
+  const { title } = req.params;
+
+  const { data, error } = await findOne({ title: title });
+  if (error) {
+    console.log("db error: fetching a book by title ", error);
+    return res
+      .status(500)
+      .json(fail("Internal server error: databse operation failed"));
+  }
+
+  if (!data) return res.status(404).json(fail("No Book found"));
+
+  res.status(200).json(success("Book fetched successfully", { data: data }));
+});
+
 (async () => {
   await connectDb();
 
