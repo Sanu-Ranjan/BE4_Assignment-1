@@ -189,6 +189,21 @@ app.post(`${homePath}/books/update/title/:title`, async (req, res) => {
   res.status(200).json(success("Book updated", { data: data }));
 });
 
+app.delete(`${homePath}/books/id/:id`, async (req, res) => {
+  const { id } = req.params;
+  const { data, error } = await deleteById(id);
+  if (error) {
+    console.log("db error: delete book by id", error);
+    return res
+      .status(500)
+      .json(fail("Internal server error: db operation failed"));
+  }
+
+  if (!data) res.status(404).json(fail("Book not found", { bookId: id }));
+
+  res.status(200).json(success("Books deleted", { data: data }));
+});
+
 (async () => {
   await connectDb();
 
