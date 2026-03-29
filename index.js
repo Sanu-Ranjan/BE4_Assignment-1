@@ -177,6 +177,18 @@ app.post(`${homePath}/books/update/:id`, async (req, res) => {
   res.status(200).json(success("Book updated", { data: data }));
 });
 
+app.post(`${homePath}/books/update/title/:title`, async (req, res) => {
+  const { title } = req.params;
+  const { rating } = req.body;
+  const { error, data } = await updateBytitle(title, { rating: rating });
+  if (error) {
+    console.log("db error: updating by title", error);
+    res.status(500).json(fail("Internal server error: db operation failed"));
+  }
+
+  res.status(200).json(success("Book updated", { data: data }));
+});
+
 (async () => {
   await connectDb();
 
