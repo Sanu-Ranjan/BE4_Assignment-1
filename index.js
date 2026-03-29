@@ -206,6 +206,17 @@ app.delete(`${homePath}/books/id/:id`, async (req, res) => {
   res.status(200).json(success("Books deleted", { data: data }));
 });
 
+app.post(`${homePath}/books/add`, async (req, res) => {
+  const book = req.body;
+  const { data, error } = await addBook(book);
+  if (error) {
+    console.log("db error: add book", error);
+    return res.status(500).json("Internal server error: db operation failed");
+  }
+
+  res.status(201).json(success("Book added successfully", { data: data }));
+});
+
 (async () => {
   await connectDb();
 
