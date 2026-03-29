@@ -121,6 +121,22 @@ app.get(`${homePath}/books/:title`, async (req, res) => {
   res.status(200).json(success("Book fetched successfully", { data: data }));
 });
 
+app.get(`${homePath}/books/author/:author`, async (req, res) => {
+  const { author } = req.params;
+
+  const { data, error } = await findAll({ author: author });
+  if (error) {
+    console.log("db error: fetching books by author", error);
+    return res
+      .status(500)
+      .json(fail("Internal server error: db operation failed"));
+  }
+
+  if (data.length === 0) return res.status(404).json(fail("No books found"));
+
+  res.status(200).json(success("Books fetched successfully", { data: data }));
+});
+
 (async () => {
   await connectDb();
 
