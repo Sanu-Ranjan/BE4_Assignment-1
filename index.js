@@ -151,6 +151,20 @@ app.get(`${homePath}/books/business`, async (req, res) => {
   res.status(200).json(success("Books fetched successfully", { data: data }));
 });
 
+app.get(`${homePath}/books/release/year/2012`, async (req, res) => {
+  const { data, error } = await findAll({ publishedYear: 2012 });
+  if (error) {
+    console.log("db error: fetching books by release year 2012", error);
+    return res
+      .status(500)
+      .json(fail("Internal server error: db operation failed"));
+  }
+
+  if (data.length === 0) return res.status(404).json(fail("No books found"));
+
+  res.status(200).json(success("Books fetched successfully", { data: data }));
+});
+
 (async () => {
   await connectDb();
 
