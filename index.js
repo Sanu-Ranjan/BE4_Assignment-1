@@ -201,7 +201,8 @@ app.delete(`${homePath}/books/id/:id`, async (req, res) => {
       .json(fail("Internal server error: db operation failed"));
   }
 
-  if (!data) res.status(404).json(fail("Book not found", { bookId: id }));
+  if (!data)
+    return res.status(404).json(fail("Book not found", { bookId: id }));
 
   res.status(200).json(success("Books deleted", { data: data }));
 });
